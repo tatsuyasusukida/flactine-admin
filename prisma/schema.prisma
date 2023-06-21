@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CourseCategory {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sort      Int
+  name      String
+  courses   Course[]
+}
+
+model Course {
+  id                 Int                 @id @default(autoincrement())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  sort               Int
+  name               String
+  price              String
+  term               String
+  imageUrl           String
+  imageWidth         Int
+  imageHeight        Int
+  stripePriceId      String
+  courseCategoryId   Int
+  courseCategory     CourseCategory      @relation(fields: [courseCategoryId], references: [id])
+  subscriptionOrders SubscriptionOrder[]
+}
+
+model SubscriptionOrder {
+  id                    Int      @id @default(autoincrement())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  orderedAt             DateTime
+  number                String   @unique
+  courseId              Int
+  course                Course   @relation(fields: [courseId], references: [id])
+  delivery              String
+  deliveryCount         Int?
+  customerName          String
+  customerKana          String
+  customerTel           String
+  customerZip           String
+  customerPrefecture    String
+  customerAddress       String
+  customerBuilding      String
+  customerEmail         String
+  destination           String
+  destinationZip        String
+  destinationPrefecture String
+  destinationAddress    String
+  destinationBuilding   String
+  destinationName       String
+  destinationTel        String
+  payment               String
+  stripeCustomerId      String?
+}
+
+model Email {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sentAt       DateTime
+  isSent       Boolean
+  fromName     String
+  fromEmail    String
+  toName       String
+  toEmail      String
+  bccEmail     String
+  replyToEmail String
+  subject      String
+  content      String   @db.MediumText
+  errorCount   Int
+  errorMessage String   @db.Text
+  errorStack   String   @db.Text
+}
+
+model Prefecture {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sort      Int
+  name      String
+  cities    City[]
+}
+
+model City {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  sort         Int
+  name         String
+  prefectureId Int
+  prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
+}

@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>要件定義書 - 第1.0版 - LINE 顧客情報管理システム</title>
+<style>
+@page {
+  margin: 20mm 20mm 20mm 20mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Hiragino Mincho ProN";
+  font-size: 12pt;
+  text-align: left;
+}
+
+@media screen {
+  body {
+    background: #eeeeee;
+  }
+}
+
+#header {
+  display: none;
+}
+
+#footer {
+  display: none;
+}
+
+.sect1 {
+  page-break-before: always;
+}
+
+@media screen {
+  .sect1,
+  #preamble {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20mm;
+    margin-bottom: 10mm;
+  }
+}
+
+@media screen {
+  #preamble {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20mm;
+    margin-bottom: 10mm;
+  }
+}
+
+h2 {
+  font-weight: normal;
+  border-bottom: 1pt solid black;
+  font-size: 18pt;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-weight: normal;
+  font-size: 14pt;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-weight: normal;
+  font-size: 12pt;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.olist ol {
+  list-style: none;
+  margin: 0;
+  margin-left: 1rem;
+  padding: 0;
+}
+
+.olist p {
+  display: inline;
+}
+
+ol.arabic {
+  counter-reset: ol1;
+  margin-left: 0;
+  margin-bottom: 1rem;
+  border: 1pt solid black;
+  padding: 1rem;
+}
+
+ol.arabic > li {
+  counter-increment: ol1;
+}
+
+ol.arabic > li:before {
+  content: "(" counter(ol1) ")";
+}
+
+ol.loweralpha {
+  counter-reset: ol2;
+}
+
+ol.loweralpha > li {
+  counter-increment: ol2;
+}
+
+ol.loweralpha > li:before {
+  content: "(" counter(ol1) "." counter(ol2) ")";
+}
+
+ol.lowerroman {
+  counter-reset: ol3;
+}
+
+ol.lowerroman > li {
+  counter-increment: ol3;
+}
+
+ol.lowerroman > li:before {
+  content: "(" counter(ol1) "." counter(ol2) "." counter(ol3) ")";
+}
+
+ol.upperalpha {
+  counter-reset: ol4;
+}
+
+ol.upperalpha > li {
+  counter-increment: ol4;
+}
+
+ol.upperalpha > li:before {
+  content: "(" counter(ol1) "." counter(ol2) "." counter(ol3) "." counter(ol4)
+    ")";
+}
+
+ol.upperroman {
+  counter-reset: ol5;
+}
+
+ol.upperroman > li {
+  counter-increment: ol5;
+}
+
+ol.upperroman > li:before {
+  content: "(" counter(ol1) "." counter(ol2) "." counter(ol3) "." counter(ol4)
+    "." counter(ol5) ")";
+}
+
+img {
+  width: 85%;
+  border: 1pt solid black;
+}
+
+.imageblock {
+  text-align: center;
+}
+
+.imageblock .title {
+  margin-bottom: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  border: 1pt solid black;
+  border-bottom: 3pt double black;
+  text-align: left;
+  font-weight: normal;
+  padding: 0.25rem;
+}
+
+td {
+  border: 1pt solid black;
+  padding: 0.25rem;
+}
+
+td p {
+  margin: 0;
+  padding: 0;
+}
+
+pre {
+  border: 1pt solid black;
+  padding: 1rem;
+  white-space: pre-wrap;
+  font-family: "Hiragino Mincho ProN";
+}
+
+code {
+  font-family: "Hiragino Mincho ProN";
+}
+
+body {
+  counter-reset: h2;
+}
+
+h2 {
+  counter-increment: h2;
+  counter-reset: h3;
+}
+
+h2:before {
+  content: counter(h2) ". ";
+}
+
+h3 {
+  counter-increment: h3;
+  counter-reset: h4;
+}
+
+h3:before {
+  content: counter(h2) "." counter(h3) ". ";
+}
+
+h4 {
+  counter-increment: h4;
+}
+
+h4:before {
+  content: counter(h2) "." counter(h3) "." counter(h4) ". ";
+}
+
+.cover-project p {
+  margin-top: 60mm;
+  text-align: center;
+  font-size: 24pt;
+  border-top: 1mm solid black;
+  margin-bottom: 0;
+  padding-top: 5mm;
+}
+
+.cover-document p {
+  text-align: center;
+  font-size: 24pt;
+  border-bottom: 1mm solid black;
+  padding-bottom: 5mm;
+}
+
+.cover-version p {
+  text-align: center;
+  font-size: 12pt;
+  padding-top: 1rem;
+}
+
+.cover-date p {
+  text-align: center;
+  font-size: 12pt;
+}
+
+.cover-company p {
+  text-align: center;
+  font-size: 18pt;
+  margin-top: 50mm;
+}
+
+.cover-address p {
+  text-align: center;
+  font-size: 12pt;
+  padding-top: 1rem;
+}
+
+.cover-tel p {
+  text-align: center;
+  font-size: 12pt;
+  margin-bottom: 0;
+}
+
+.cover-email p {
+  text-align: center;
+  font-size: 12pt;
+}
+
+.cover-email a {
+  color: black;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>要件定義書 - 第1.0版 - LINE 顧客情報管理システム</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph cover-project">
+<p>LINE 顧客情報管理システム</p>
+</div>
+<div class="paragraph cover-document">
+<p>要件定義書</p>
+</div>
+<div class="paragraph cover-version">
+<p>第 1.0 版</p>
+</div>
+<div class="paragraph cover-date">
+<p>2023 年 6 月 21 日 (水)</p>
+</div>
+<div class="paragraph cover-company">
+<p>株式会社ロレムイプサム</p>
+</div>
+<div class="paragraph cover-address">
+<p>新潟県長岡市関原南 4 丁目 3934 番地</p>
+</div>
+<div class="paragraph cover-tel">
+<p>TEL: 0258-94-5233</p>
+</div>
+<div class="paragraph cover-email">
+<p>E-mail: <a href="mailto:susukida@loremipsum.co.jp">susukida@loremipsum.co.jp</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_この文書の目的と構成">この文書の目的と構成</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>この文書の目的はシステムの機能要件を規定することで委託者と受託者の間で合意形成を図ることです。この文書の構成を表に示します。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">表 1. この文書の構成</caption>
+<colgroup>
+<col style="width: 7.6923%;">
+<col style="width: 46.1538%;">
+<col style="width: 46.1539%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">番号</th>
+<th class="tableblock halign-left valign-top">見出し</th>
+<th class="tableblock halign-left valign-top">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">この文書の目的と構成</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">この文書の目的と構成を示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">システム構成</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">レイアウト</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">トップページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">顧客情報ページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">顧客情報エクセル入力ページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">顧客情報エクセル入力完了ページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LINE メッセージページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LINE メッセージ一斉送信ページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LINE メッセージ一斉送信完了ページ</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">要件をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">特記事項</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">特記事項をリストに示します</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">改訂記録</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">改訂記録を表に示します</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ページ構成">ページ構成</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>トップページ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>顧客情報ページ</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>顧客情報エクセル入力ページ</p>
+</li>
+<li>
+<p>顧客情報エクセル入力完了ページ</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>LINE メッセージページ</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>LINE メッセージ一斉送信ページ</p>
+</li>
+<li>
+<p>LINE メッセージ一斉送信完了ページ</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_レイアウト">レイアウト</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_構成">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ヘッダー</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>システム名</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>パンくずリスト</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>リンク（複数）</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>メインコンテンツ</p>
+</li>
+<li>
+<p>フッター</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>著作権表示</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能">機能</h3>
+<div class="sect3">
+<h4 id="_ヘッダー">ヘッダー</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがヘッダーのシステム名をクリックした時、システムはトップページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_パンくずリスト">パンくずリスト</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがパンくずリストのリンクをクリックした時、システムは上の階層のページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_トップページ">トップページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/top.png" alt="top">
+</div>
+<div class="title">図 1. トップページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_2">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>ボタン一覧</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>顧客情報ボタン</p>
+</li>
+<li>
+<p>LINE メッセージボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_2">機能</h3>
+<div class="sect3">
+<h4 id="_顧客情報ボタン">顧客情報ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが顧客情報ボタンを押した時、システムは顧客情報ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_line_メッセージボタン">LINE メッセージボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが LINE メッセージボタンを押した時、システムは LINE メッセージページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_顧客情報ページ">顧客情報ページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_2">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/customers.png" alt="customers">
+</div>
+<div class="title">図 2. 顧客情報ページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_3">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>ボタン一覧</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>戻るボタン</p>
+</li>
+<li>
+<p>エクセル入力ボタン</p>
+</li>
+<li>
+<p>エクセル出力ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_3">機能</h3>
+<div class="sect3">
+<h4 id="_戻るボタン">戻るボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが戻るボタンを押した時、システムはトップページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_エクセル入力ボタン">エクセル入力ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル入力ボタンを押した時、システムは顧客情報エクセル入力ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_エクセル出力ボタン">エクセル出力ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル出力ボタンを押した時、システムは顧客情報エクセルファイルのダウンロードを開始する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_顧客情報エクセルファイル">顧客情報エクセルファイル</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>顧客情報エクセルファイルは番号列、顧客名列、LINE ID 列、配送スタッフ列、固定電話列、携帯電話列、月別配達日列（複数）から構成される。</p>
+</li>
+<li>
+<p>番号列は入力を必須とし、1 以上の整数とする。</p>
+</li>
+<li>
+<p>顧客名列は入力を必須とし、最大 100 文字とする。</p>
+</li>
+<li>
+<p>LINE ID 列は入力を任意とするが重複は不可とし、半角英数字33文字とする。</p>
+</li>
+<li>
+<p>配送スタッフ列は入力を任意とし、最大 100 文字とする。</p>
+</li>
+<li>
+<p>固定電話列は入力を任意とし、最大 100 文字とする。</p>
+</li>
+<li>
+<p>携帯電話列は入力を任意とし、最大 100 文字とする。</p>
+</li>
+<li>
+<p>月別配達日列の列名は「(西暦年4桁)年(1〜12)月」とし、数字は半角または全角とする。</p>
+</li>
+<li>
+<p>月別配達日列の内容は「(1〜5)(月〜日)」とし、数字は半角または全角とする。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>「1〜5」は第1〜第5であることを示す。</p>
+</li>
+<li>
+<p>「月〜日」は月曜日〜日曜日であることを示す。</p>
+</li>
+<li>
+<p>例えば「1月」は配達日が第 1 火曜日であることを示す。</p>
+</li>
+<li>
+<p>「1〜5」は「・」で区切ることで複数入力可とする。</p>
+</li>
+<li>
+<p>例えば「1・3月」は配達日が第 1 月曜日と第 3 月曜日であることを示す。</p>
+</li>
+<li>
+<p>「(1〜5)(月〜日)」は全角スペースまたは半角スペースで区切ることで複数入力可とする。</p>
+</li>
+<li>
+<p>例えば「1月 3火」は配達日が第 1 月曜日と第 3 火曜日であることを示す。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>配達お休みの場合は日付の後に「休」を付加する。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>例えば「1休・3月」は第 1 月曜日が配達お休みであることを示す。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_顧客情報エクセル入力ページ">顧客情報エクセル入力ページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_3">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/customers-import.png" alt="customers import">
+</div>
+<div class="title">図 3. 顧客情報エクセル入力ページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_4">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>ボタン一覧</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>戻るボタン</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>フォーム</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>顧客情報エクセルファイル選択</p>
+</li>
+<li>
+<p>入力開始ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_4">機能</h3>
+<div class="sect3">
+<h4 id="_戻るボタン_2">戻るボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが戻るボタンを押した時、システムは顧客情報ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_エクセル入力ボタン_2">エクセル入力ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル入力ボタンを押した時、システムは顧客情報エクセル入力ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_エクセル出力ボタン_2">エクセル出力ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル出力ボタンを押した時、システムは顧客情報エクセルファイルのダウンロードを開始する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_入力開始ボタン">入力開始ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが入力開始ボタンを押した時、システムは顧客情報エクセルファイルから顧客情報を読み込んでデータベースに登録する。</p>
+</li>
+<li>
+<p>顧客情報エクセルファイルの仕様については顧客情報エクセル出力ページの記載を準用する。</p>
+</li>
+<li>
+<p>顧客情報に誤りがある場合、システムはエラーメッセージを表示する。</p>
+</li>
+<li>
+<p>データベースへの登録が完了した時、システムは顧客情報エクセル入力完了ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_顧客情報エクセル入力完了ページ">顧客情報エクセル入力完了ページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_4">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/customers-import-finish.png" alt="customers import finish">
+</div>
+<div class="title">図 4. 顧客情報エクセル入力完了ページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_5">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>お客さま情報を表示ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_5">機能</h3>
+<div class="sect3">
+<h4 id="_お客さま情報を表示ボタン">お客さま情報を表示ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがお客さま情報を表示ボタンを押した時、システムは顧客情報ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_line_メッセージページ">LINE メッセージページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_5">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/messages.png" alt="messages">
+</div>
+<div class="title">図 5. メッセージページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_6">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>ボタン一覧</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>戻るボタン</p>
+</li>
+<li>
+<p>送信履歴ダウンロードボタン</p>
+</li>
+<li>
+<p>一斉送信ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_6">機能</h3>
+<div class="sect3">
+<h4 id="_戻るボタン_3">戻るボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが戻るボタンを押した時、システムはトップページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_エクセル入力ボタン_3">エクセル入力ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル入力ボタンを押した時、システムは顧客情報エクセル入力ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_送信履歴ダウンロードボタン">送信履歴ダウンロードボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが送信履歴ダウンロードボタンを押した時、システムは送信履歴エクセルファイルのダウンロードを開始する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_送信履歴エクセルファイル">送信履歴エクセルファイル</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>顧客情報エクセルファイルは送信日時列、宛先列、LINE ID列、送信内容列、送信結果列、メラーメッセージ列から構成される。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_一斉送信ボタン">一斉送信ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーがエクセル入力ボタンを押した時、システムは LINE メッセージ一斉送信ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_line_メッセージ一斉送信ページ">LINE メッセージ一斉送信ページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_6">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/messages-send.png" alt="messages send">
+</div>
+<div class="title">図 6. LINE メッセージ一斉送信ページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_7">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>ボタン一覧</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>戻るボタン</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>フォーム</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>LINE ユーザー ID 入力</p>
+</li>
+<li>
+<p>メッセージ内容入力</p>
+</li>
+<li>
+<p>一斉送信ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_7">機能</h3>
+<div class="sect3">
+<h4 id="_戻るボタン_4">戻るボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが戻るボタンを押した時、システムは LINE メッセージページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_一斉送信ボタン_2">一斉送信ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが一斉送信ボタンを押した時、システムは入力された LINE ユーザー ID に対して LINE メッセージを送信する。</p>
+</li>
+<li>
+<p>LINE ユーザー ID は改行で区切って複数入力できるものとする。</p>
+</li>
+<li>
+<p>送信完了後、システムは LINE メッセージ一斉送信完了ページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_line_メッセージ一斉送信完了ページ">LINE メッセージ一斉送信完了ページ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_画面例_7">画面例</h3>
+<div class="imageblock">
+<div class="content">
+<img src="img/messages-send-finish.png" alt="messages send finish">
+</div>
+<div class="title">図 7. LINE メッセージ一斉送信完了ページの画面例</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_構成_8">構成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メインコンテンツ</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>見出し</p>
+</li>
+<li>
+<p>LINE メッセージを表示ボタン</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_機能_8">機能</h3>
+<div class="sect3">
+<h4 id="_line_メッセージを表示ボタン">LINE メッセージを表示ボタン</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ユーザーが LINE メッセージを表示ボタンを押した時、システムは LINE メッセージページを表示する。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_特記事項">特記事項</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_基本情報">基本情報</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>契約類型は「請負」です。</p>
+</li>
+<li>
+<p>納入物の著作権は「貴社」に帰属します。</p>
+</li>
+<li>
+<p>瑕疵担保責任期間は成果物納品日の翌日から起算して 1 年間です。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_納入物一覧">納入物一覧</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ソースコード（プログラムの設計をプログラミングで記述するテキストファイル）</p>
+</li>
+<li>
+<p>テストコード（プログラムを検査するためのプログラムのソースコード）</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_作業一覧">作業一覧</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>単体テスト、API テスト</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>「テスト」とはテストコードを使用したプログラムの検査を指します。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>検証サーバー構築、本番サーバー構築</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>「サーバー構築」とはシステムを運用するためのサーバーの構築を指します。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>顧客・カレンダーデータ移行</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>「データ移行」とはシステムを運用するためのデータ設定・登録作業を指します。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>レクチャー</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>「レクチャー」とは利用者様に対して操作手順等を口頭で教えることを指します。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_瑕疵担保責任期間">瑕疵担保責任期間</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>瑕疵（バグや不具合）を要件定義書の記載内容との不一致と定義します。</p>
+</li>
+<li>
+<p>瑕疵担保責任期間に通知された瑕疵については無償にて修正・追完します。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_仕様変更">仕様変更</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>コーディング開始後、仕様の変更・追加については別途お見積りの上、有償にて対応します。</p>
+</li>
+<li>
+<p>仕様の変更・追加については要件定義書に基づいて判断します。</p>
+</li>
+<li>
+<p>要件定義書に明記されない事項については「仕様追加」と判断する場合がございます。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_文言修正">文言修正</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>メッセージの本文についてはサーバー構築前まで無償にて変更を承ります。</p>
+</li>
+<li>
+<p>メッセージで使用できる変数についてはコーディング開始前まで無償にて変更を承ります。</p>
+</li>
+<li>
+<p>Chatwork 通知の本文と使用できる変数についてはコーディング開始前まで無償にて変更を承ります。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_改訂記録">改訂記録</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>改訂記録を表に示します。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">表 2. 改訂記録</caption>
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 22.2223%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">版</th>
+<th class="tableblock halign-left valign-top">日付</th>
+<th class="tableblock halign-left valign-top">摘要</th>
+<th class="tableblock halign-left valign-top">作成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2023 年 6 月 21 日 (水)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">初版作成</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">薄田 達哉</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2023-06-21 10:38:20 +0900
+</div>
+</div>
+</body>
+</html>

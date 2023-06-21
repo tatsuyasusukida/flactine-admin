@@ -1,0 +1,33 @@
+{
+  "name": "hanaseikatsu-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:docs": "asciidoctor -a stylesheet=style.css -o docs/requirement.html docs/requirement.adoc",
+    "start": "next start",
+    "lint": "next lint",
+    "activate": "gcloud config configurations activate flower-act",
+    "list": "gcloud meta list-files-for-upload",
+    "deploy": "npm run activate && gcloud run deploy hanaseikatsu-admin --source . --platform managed --region asia-northeast1 --allow-unauthenticated"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.14.0",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.33",
+    "@types/react-dom": "18.0.11",
+    "bootstrap": "^5.2.3",
+    "eslint": "8.37.0",
+    "eslint-config-next": "13.3.0",
+    "next": "13.3.0",
+    "node-xlsx": "^0.21.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.32.2",
+    "prisma": "^4.14.0"
+  }
+}
