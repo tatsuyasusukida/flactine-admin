@@ -28,7 +28,7 @@ export default function Customers() {
               </Link>
               <Link
                 className="btn btn-outline-primary"
-                href="/customers.xlsx"
+                href="/api/customers/export"
                 target="_blank"
               >
                 エクセル出力

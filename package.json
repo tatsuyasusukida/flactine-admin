@@ -1,5 +1,5 @@
 {
-  "name": "hanaseikatsu-admin",
+  "name": "flactine-admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,9 @@
     "lint": "next lint",
     "activate": "gcloud config configurations activate flower-act",
     "list": "gcloud meta list-files-for-upload",
-    "deploy": "npm run activate && gcloud run deploy hanaseikatsu-admin --source . --platform managed --region asia-northeast1 --allow-unauthenticated"
+    "deploy": "npm run activate && gcloud run deploy flactine-admin --source . --platform managed --region asia-northeast1 --allow-unauthenticated",
+    "db:seed": "dotenv -e .env.local -- prisma db seed",
+    "db:push": "dotenv -e .env.local -- prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
@@ -28,6 +30,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.32.2",
-    "prisma": "^4.14.0"
+    "prisma": "^4.14.0",
+    "ts-node": "^10.9.1"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }

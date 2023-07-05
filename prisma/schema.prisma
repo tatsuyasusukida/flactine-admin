@@ -10,95 +10,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model CourseCategory {
+model User {
+  id            Int        @id @default(autoincrement())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  number        Int
+  name          String
+  lineUserId    String     @unique
+  deliveryStaff String
+  tel           String
+  mobile        String
+  deliveries    Delivery[]
+}
+
+model Delivery {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  sort      Int
-  name      String
-  courses   Course[]
+  date      DateTime @db.Date
+  skip      Boolean
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
-model Course {
-  id                 Int                 @id @default(autoincrement())
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  sort               Int
-  name               String
-  price              String
-  term               String
-  imageUrl           String
-  imageWidth         Int
-  imageHeight        Int
-  stripePriceId      String
-  courseCategoryId   Int
-  courseCategory     CourseCategory      @relation(fields: [courseCategoryId], references: [id])
-  subscriptionOrders SubscriptionOrder[]
-}
-
-model SubscriptionOrder {
-  id                    Int      @id @default(autoincrement())
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  orderedAt             DateTime
-  number                String   @unique
-  courseId              Int
-  course                Course   @relation(fields: [courseId], references: [id])
-  delivery              String
-  deliveryCount         Int?
-  customerName          String
-  customerKana          String
-  customerTel           String
-  customerZip           String
-  customerPrefecture    String
-  customerAddress       String
-  customerBuilding      String
-  customerEmail         String
-  destination           String
-  destinationZip        String
-  destinationPrefecture String
-  destinationAddress    String
-  destinationBuilding   String
-  destinationName       String
-  destinationTel        String
-  payment               String
-  stripeCustomerId      String?
-}
-
-model Email {
+model ChatworkMessage {
   id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  sentAt       DateTime
-  isSent       Boolean
-  fromName     String
-  fromEmail    String
-  toName       String
-  toEmail      String
-  bccEmail     String
-  replyToEmail String
-  subject      String
+  date         DateTime @db.Date
   content      String   @db.MediumText
-  errorCount   Int
+  isSent       Boolean
   errorMessage String   @db.Text
   errorStack   String   @db.Text
 }
 
-model Prefecture {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sort      Int
-  name      String
-  cities    City[]
+model UserState {
+  id         Int            @id @default(autoincrement())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  date       DateTime
+  lineUserId String         @unique
+  value      UserStateValue
 }
 
-model City {
-  id           Int        @id @default(autoincrement())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  sort         Int
-  name         String
-  prefectureId Int
-  prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
+enum UserStateValue {
+  WaitingComplaint // 商品・サービスに問題：その他の入力待ち
+  WaitingPlaceProduct // 商品の置き場所：その他の入力待ち
+  WaitingPlaceMoney // お金の置き場所：その他の入力待ち
+  WaitingMessage // その他伝言の入力待ち
 }
