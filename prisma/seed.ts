@@ -9,7 +9,7 @@ async function main() {
     name: '名古屋 花子',
     lineUserId: 'U00000000000000000000000000000000',
     deliveryStaff: '関',
-    tel: '052',
+    tel: '05212345678',
     mobile: '09012345678',
   };
 
