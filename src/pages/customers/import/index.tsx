@@ -1,12 +1,15 @@
 import Layout from "@/components/layout";
+import { CustomersImportSubmitResponse } from "@/pages/api/customers/import/submit";
 import { CustomersImportValidateResponse } from "@/pages/api/customers/import/validate";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { MouseEventHandler, useRef, useState } from "react";
 
 export default function CustomersImport() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errorMessages, setErrorMessages] = useState<String[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const onClick: MouseEventHandler = async (event) => {
     event.preventDefault();
 
@@ -34,6 +37,18 @@ export default function CustomersImport() {
       if (!validationResult.ok) {
         setErrorMessages(validationResult.errorMessages);
         return;
+      }
+
+      const submitResponse = await fetch("/api/customers/import/submit", {
+        method: "PUT",
+        body: file,
+      });
+
+      const submissionResult: CustomersImportSubmitResponse =
+        await submitResponse.json();
+
+      if (submissionResult.ok) {
+        router.push(submissionResult.redirect);
       }
     } finally {
       setIsSubmitting(false);

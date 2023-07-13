@@ -1,16 +1,12 @@
-import { prisma } from "@/lib/db";
 import { NextApiRequest, NextApiResponse, PageConfig } from "next";
-import xlsx from "xlsx";
+import xlsx, { WorkBook } from "xlsx";
 
 export type CustomersImportValidateResponse = {
   ok: boolean;
   errorMessages: string[];
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<CustomersImportValidateResponse>
-) {
+export async function readWorkBook(req: NextApiRequest): Promise<WorkBook> {
   const chunks = [];
 
   for await (const chunk of req) {
@@ -18,62 +14,22 @@ export default async function handler(
   }
 
   const buffer = Buffer.concat(chunks);
-  const workbook = xlsx.read(buffer);
-  const sheetName = "Sheet 1";
-  const sheet = workbook.Sheets[sheetName];
+  return xlsx.read(buffer);
+}
 
-  if (!sheet) {
-    res.send({
-      ok: false,
-      errorMessages: [`${sheetName} が見つかりません。`],
-    });
+export const customersSheetName = "Sheet 1";
 
-    return;
-  }
+export type DeliveryHeaderCell = {
+  text: string;
+  year: number;
+  month: number;
+};
 
-  const rows: { [headerCell: string]: string }[] =
-    xlsx.utils.sheet_to_json(sheet);
-
-  if (rows.length < 1) {
-    res.send({
-      ok: false,
-      errorMessages: ["行数が 0 件です。"],
-    });
-
-    return;
-  }
-
-  const actualHeaderCells = Object.keys(rows[0]);
-  const expectedHeaderCells = [
-    "番号",
-    "顧客名",
-    "LINE ID",
-    "配達スタッフ",
-    "固定電話",
-    "携帯電話",
-  ];
-
-  const notFoundHeaderCells = expectedHeaderCells.filter((headerCell) => {
-    return actualHeaderCells.indexOf(headerCell) === -1;
-  });
-
-  if (notFoundHeaderCells.length >= 1) {
-    res.send({
-      ok: false,
-      errorMessages: notFoundHeaderCells.map((headerCell) => {
-        return `${headerCell}列が見つかりません。`;
-      }),
-    });
-
-    return;
-  }
-
+export function getDeliveryHeaderCells(
+  actualHeaderCells: string[]
+): DeliveryHeaderCell[] {
   const monthHeaderPattern = /^(\d{4})年(\d{1,2})月$/;
-  const deliveryHeaderCells: {
-    text: string;
-    year: number;
-    month: number;
-  }[] = [];
+  const deliveryHeaderCells: DeliveryHeaderCell[] = [];
 
   actualHeaderCells.forEach((text) => {
     const match = text.match(monthHeaderPattern);
@@ -86,34 +42,18 @@ export default async function handler(
     }
   });
 
-  if (deliveryHeaderCells.length < 1) {
-    res.send({
-      ok: false,
-      errorMessages: ["月別配達日列が見つかりません。"],
-    });
+  return deliveryHeaderCells;
+}
 
-    return;
-  }
+export function workbookToCustomers(workbook: WorkBook) {
+  const sheet = workbook.Sheets[customersSheetName];
+  const rows: { [headerCell: string]: string }[] =
+    xlsx.utils.sheet_to_json(sheet);
 
-  const invalidDeliveryHeaderCells = deliveryHeaderCells.filter(
-    (deliveryHeaderCell) => {
-      const { month } = deliveryHeaderCell;
-      return month < 1 || 12 < month;
-    }
-  );
+  const actualHeaderCells = Object.keys(rows[0]);
+  const deliveryHeaderCells = getDeliveryHeaderCells(actualHeaderCells);
 
-  if (invalidDeliveryHeaderCells.length >= 1) {
-    res.send({
-      ok: false,
-      errorMessages: invalidDeliveryHeaderCells.map((deliveryHeaderCell) => {
-        return `${deliveryHeaderCell.text}列の年月が不正です。`;
-      }),
-    });
-
-    return;
-  }
-
-  const customers = rows.map((row) => {
+  return rows.map((row) => {
     const number = row["番号"];
     const name = row["顧客名"];
     const lineUserId = row["LINE ID"];
@@ -135,7 +75,79 @@ export default async function handler(
       deliveries,
     };
   });
+}
 
+export function validateWorkbook(
+  workbook: WorkBook
+): CustomersImportValidateResponse {
+  const sheet = workbook.Sheets[customersSheetName];
+
+  if (!sheet) {
+    return {
+      ok: false,
+      errorMessages: [`${customersSheetName} が見つかりません。`],
+    };
+  }
+
+  const rows: { [headerCell: string]: string }[] =
+    xlsx.utils.sheet_to_json(sheet);
+
+  if (rows.length < 1) {
+    return {
+      ok: false,
+      errorMessages: ["行数が 0 件です。"],
+    };
+  }
+
+  const actualHeaderCells = Object.keys(rows[0]);
+  const expectedHeaderCells = [
+    "番号",
+    "顧客名",
+    "LINE ID",
+    "配達スタッフ",
+    "固定電話",
+    "携帯電話",
+  ];
+
+  const notFoundHeaderCells = expectedHeaderCells.filter((headerCell) => {
+    return actualHeaderCells.indexOf(headerCell) === -1;
+  });
+
+  if (notFoundHeaderCells.length >= 1) {
+    return {
+      ok: false,
+      errorMessages: notFoundHeaderCells.map((headerCell) => {
+        return `${headerCell}列が見つかりません。`;
+      }),
+    };
+  }
+
+  const deliveryHeaderCells = getDeliveryHeaderCells(actualHeaderCells);
+
+  if (deliveryHeaderCells.length < 1) {
+    return {
+      ok: false,
+      errorMessages: ["月別配達日列が見つかりません。"],
+    };
+  }
+
+  const invalidDeliveryHeaderCells = deliveryHeaderCells.filter(
+    (deliveryHeaderCell) => {
+      const { month } = deliveryHeaderCell;
+      return month < 1 || 12 < month;
+    }
+  );
+
+  if (invalidDeliveryHeaderCells.length >= 1) {
+    return {
+      ok: false,
+      errorMessages: invalidDeliveryHeaderCells.map((deliveryHeaderCell) => {
+        return `${deliveryHeaderCell.text}列の年月が不正です。`;
+      }),
+    };
+  }
+
+  const customers = workbookToCustomers(workbook);
   const errorMessages: string[] = [];
 
   customers.forEach((customer, i) => {
@@ -208,10 +220,20 @@ export default async function handler(
     errorMessages.push(`次の LINE ID が重複しています：${lineUserId}`);
   }
 
-  res.send({
+  return {
     ok: errorMessages.length === 0,
     errorMessages,
-  });
+  };
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<CustomersImportValidateResponse>
+) {
+  const workbook = await readWorkBook(req);
+  const validationResult = validateWorkbook(workbook);
+
+  res.send(validationResult);
 }
 
 export const config: PageConfig = {
