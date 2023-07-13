@@ -122,7 +122,7 @@ export default async function handler(
     const mobile = row["携帯電話"];
     const deliveries = deliveryHeaderCells.map(({ text, year, month }) => {
       const input = row[text];
-      return { year, month, input };
+      return { text, year, month, input };
     });
 
     return {
@@ -164,11 +164,53 @@ export default async function handler(
         );
       }
     }
+
+    if (customer.deliveryStaff !== "" && customer.deliveryStaff.length > 100) {
+      errorMessages.push(
+        `${rowNumber} 行目：配達スタッフを 1〜100 文字でご入力ください。`
+      );
+    }
+
+    if (customer.tel !== "" && customer.tel.length > 100) {
+      errorMessages.push(
+        `${rowNumber} 行目：固定電話を 1〜100 文字でご入力ください。`
+      );
+    }
+
+    if (customer.tel !== "" && customer.tel.length > 100) {
+      errorMessages.push(
+        `${rowNumber} 行目：携帯電話を 1〜100 文字でご入力ください。`
+      );
+    }
+
+    for (const delivery of customer.deliveries) {
+      const singleDay = "[1-5１-５]休?";
+      const multipleDays = `${singleDay}(・${singleDay})*[日月火水木金土]`;
+      const pattern = new RegExp(
+        `^\\s*${multipleDays}(\\s${multipleDays})*\\s\*$`
+      );
+
+      if (delivery.input !== "" && !pattern.test(delivery.input)) {
+        errorMessages.push(
+          `${rowNumber} 行目：${delivery.text}の配達日をご確認ください。`
+        );
+      }
+    }
   });
+
+  const duplicatedLineUserIds = customers
+    .map((customer) => customer.lineUserId)
+    .filter((lineUserId, i, lineUserIds) => {
+      return lineUserIds.indexOf(lineUserId) !== i;
+    });
+
+  for (const lineUserId of duplicatedLineUserIds) {
+    errorMessages.push(`次の LINE ID が重複しています：${lineUserId}`);
+  }
 
   res.send({
     ok: errorMessages.length === 0,
-    errorMessages: [],
+    errorMessages,
   });
 }
 
