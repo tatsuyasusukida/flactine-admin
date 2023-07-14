@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
-import xlsx from "node-xlsx";
+import xlsx from "xlsx";
 
 export default async function handler(
   req: NextApiRequest,
@@ -99,16 +99,13 @@ export default async function handler(
     ];
   });
 
-  const buffer = xlsx.build([
-    {
-      name: "Sheet 1",
-      data: [headerCells, ...rows],
-      options: {},
-    },
-  ]);
+  const workbook = xlsx.utils.book_new();
+  const worksheet = xlsx.utils.aoa_to_sheet([headerCells, ...rows]);
+
+  xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+  const buffer = xlsx.write(workbook, { type: "buffer" });
 
   res.setHeader("Content-Disposition", 'attachment; filename="customers.xlsx"');
 
   res.send(buffer);
-  res.send([headerCells, ...rows]);
 }

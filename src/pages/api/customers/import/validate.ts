@@ -54,14 +54,14 @@ export function workbookToCustomers(workbook: WorkBook) {
   const deliveryHeaderCells = getDeliveryHeaderCells(actualHeaderCells);
 
   return rows.map((row) => {
-    const number = row["番号"].trim();
-    const name = row["顧客名"].trim();
-    const lineUserId = row["LINE ID"].trim();
-    const deliveryStaff = row["配達スタッフ"].trim();
-    const tel = row["固定電話"].trim();
-    const mobile = row["携帯電話"].trim();
+    const number = row["番号"].toString().trim();
+    const name = row["顧客名"].toString().trim();
+    const lineUserId = row["LINE ID"].toString().trim();
+    const deliveryStaff = row["配達スタッフ"].toString().trim();
+    const tel = row["固定電話"].toString().trim();
+    const mobile = row["携帯電話"].toString().trim();
     const deliveries = deliveryHeaderCells.map(({ text, year, month }) => {
-      const input = row[text].trim();
+      const input = row[text].toString().trim();
       return { text, year, month, input };
     });
 
