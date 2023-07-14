@@ -54,14 +54,14 @@ export function workbookToCustomers(workbook: WorkBook) {
   const deliveryHeaderCells = getDeliveryHeaderCells(actualHeaderCells);
 
   return rows.map((row) => {
-    const number = row["番号"];
-    const name = row["顧客名"];
-    const lineUserId = row["LINE ID"];
-    const deliveryStaff = row["配達スタッフ"];
-    const tel = row["固定電話"];
-    const mobile = row["携帯電話"];
+    const number = row["番号"].trim();
+    const name = row["顧客名"].trim();
+    const lineUserId = row["LINE ID"].trim();
+    const deliveryStaff = row["配達スタッフ"].trim();
+    const tel = row["固定電話"].trim();
+    const mobile = row["携帯電話"].trim();
     const deliveries = deliveryHeaderCells.map(({ text, year, month }) => {
-      const input = row[text];
+      const input = row[text].trim();
       return { text, year, month, input };
     });
 
@@ -198,9 +198,7 @@ export function validateWorkbook(
     for (const delivery of customer.deliveries) {
       const singleDay = "[1-5１-５]休?";
       const multipleDays = `${singleDay}(・${singleDay})*[日月火水木金土]`;
-      const pattern = new RegExp(
-        `^\\s*${multipleDays}(\\s${multipleDays})*\\s\*$`
-      );
+      const pattern = new RegExp(`^${multipleDays}(\\s${multipleDays})*$`);
 
       if (delivery.input !== "" && !pattern.test(delivery.input)) {
         errorMessages.push(

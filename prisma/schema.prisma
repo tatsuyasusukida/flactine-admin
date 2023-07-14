@@ -16,7 +16,7 @@ model User {
   updatedAt     DateTime   @updatedAt
   number        Int
   name          String
-  lineUserId    String     @unique
+  lineUserId    String
   deliveryStaff String
   tel           String
   mobile        String
@@ -29,7 +29,7 @@ model Delivery {
   updatedAt DateTime @updatedAt
   date      DateTime @db.Date
   skip      Boolean
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
 }
 
