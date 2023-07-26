@@ -22,7 +22,7 @@ export default function Messages() {
               </Link>
               <Link
                 className="btn btn-outline-primary"
-                href="/line-messages.xlsx"
+                href="/api/line-messages/export"
                 target="_blank"
               >
                 送信履歴ダウンロード
