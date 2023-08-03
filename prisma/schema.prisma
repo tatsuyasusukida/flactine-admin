@@ -59,3 +59,17 @@ enum UserStateValue {
   WaitingPlaceMoney // お金の置き場所：その他の入力待ち
   WaitingMessage // その他伝言の入力待ち
 }
+
+model LineMessage {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  date         DateTime
+  lineUserName String
+  lineUserId   String
+  content      String   @db.Text
+  isSent       Boolean
+  errorCount   Int
+  errorMessage String   @db.Text
+  errorStack   String   @db.Text
+}
