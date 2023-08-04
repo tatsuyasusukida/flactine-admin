@@ -1,7 +1,64 @@
 import Layout from "@/components/layout";
+import classNames from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { Fragment } from "react";
+import { ChangeEventHandler, MouseEventHandler, useState } from "react";
 
 export default function MessagesImport() {
+  const router = useRouter();
+  const [form, setForm] = useState({
+    userId: "",
+    content: "",
+  });
+
+  const [validation, setValidation] = useState({
+    ok: null,
+    userId: { ok: null, messages: [] },
+    content: { ok: null, messages: [] },
+  });
+
+  const onChangeForm: ChangeEventHandler<HTMLTextAreaElement> = (event) => {
+    const { name, value } = event.target;
+    setForm((form) => ({
+      ...form,
+      [name]: value,
+    }));
+  };
+
+  const onSubmit: MouseEventHandler<HTMLButtonElement> = async (event) => {
+    try {
+      event.preventDefault();
+
+      const validateUrl = "/api/line-messages/send/validate";
+      const fetchOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify(form),
+      };
+
+      const validateResponse = await fetch(validateUrl, fetchOptions);
+      const { validation } = await validateResponse.json();
+
+      if (!validation.ok) {
+        setValidation(validation);
+        return;
+      }
+
+      const submitUrl = "/api/line-messages/send/submit";
+      const submitResponse = await fetch(submitUrl, fetchOptions);
+      const { ok, redirect } = await submitResponse.json();
+
+      if (ok) {
+        router.push(redirect);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Layout title="LINEメッセージの一斉送信">
       <div className="container">
@@ -34,8 +91,22 @@ export default function MessagesImport() {
                 name="userId"
                 id="userId"
                 rows={5}
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": validation.userId.ok === false,
+                })}
+                onChange={onChangeForm}
+                value={form.userId}
               ></textarea>
+              {validation.userId.ok === false && (
+                <p className="invalid-feedback">
+                  {validation.userId.messages.map((message, i) => (
+                    <Fragment key={i}>
+                      {i >= 1 && <br />}
+                      {message}
+                    </Fragment>
+                  ))}
+                </p>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="content" className="form-label">
@@ -45,15 +116,30 @@ export default function MessagesImport() {
                 name="content"
                 id="content"
                 rows={10}
-                className="form-control"
+                className={classNames("form-control", {
+                  "is-invalid": validation.content.ok === false,
+                })}
+                onChange={onChangeForm}
+                value={form.content}
               ></textarea>
+              {validation.content.ok === false && (
+                <p className="invalid-feedback">
+                  {validation.content.messages.map((message, i) => (
+                    <Fragment key={i}>
+                      {i >= 1 && <br />}
+                      {message}
+                    </Fragment>
+                  ))}
+                </p>
+              )}
             </div>
-            {/* <button className="btn btn-primary" type="submit">
+            <button
+              className="btn btn-primary"
+              type="submit"
+              onClick={onSubmit}
+            >
               一斉送信
-            </button> */}
-            <Link className="btn btn-primary" href="/messages/send/finish">
-              一斉送信
-            </Link>
+            </button>
           </form>
         </main>
       </div>
