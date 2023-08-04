@@ -25,7 +25,7 @@ export default async function handler(
     const statusText = lineMessage.isSent
       ? "成功"
       : lineMessage.errorCount >= 1
-      ? lineMessage.errorMessage
+      ? "失敗"
       : "未送信";
 
     const errorMessage = lineMessage.isSent ? "" : lineMessage.errorMessage;

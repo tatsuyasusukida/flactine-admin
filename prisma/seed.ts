@@ -7,7 +7,7 @@ async function main() {
     id: 1,
     number: 1,
     name: "名古屋 花子",
-    lineUserId: "U00000000000000000000000000000000",
+    lineUserId: process.env.SEED_LINE_USER_ID!,
     deliveryStaff: "関",
     tel: "05212345678",
     mobile: "09012345678",
@@ -72,6 +72,7 @@ async function main() {
     errorCount: 0,
     errorMessage: "",
     errorStack: "",
+    retryKey: "123e4567-e89b-12d3-a456-426614174000",
   }));
 
   for (const lineMessage of lineMessages) {
