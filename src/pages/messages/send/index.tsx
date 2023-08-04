@@ -36,7 +36,7 @@ export default function MessagesImport() {
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ form }),
       };
 
       const validateResponse = await fetch(validateUrl, fetchOptions);
