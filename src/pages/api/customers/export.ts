@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextApiRequest, NextApiResponse } from "next";
-import xlsx from "xlsx";
+import xlsx from "xlsx-js-style";
 
 export default async function handler(
   req: NextApiRequest,
@@ -101,6 +101,37 @@ export default async function handler(
 
   const workbook = xlsx.utils.book_new();
   const worksheet = xlsx.utils.aoa_to_sheet([headerCells, ...rows]);
+
+  worksheet["!cols"] = [
+    { wpx: 50 },
+    { wpx: 150 },
+    { wpx: 250 },
+    { wpx: 100 },
+    { wpx: 200 },
+    { wpx: 200 },
+    ...sortedMonths.map(() => ({ wpx: 150 })),
+  ];
+
+  worksheet["!rows"] = [...Array(rows.length + 1)].map(() => ({
+    hpx: 20,
+  }));
+
+  for (const key of Object.keys(worksheet)) {
+    if (!key.startsWith("!")) {
+      worksheet[key] = {
+        ...worksheet[key],
+        s: {
+          alignment: {
+            vertical: "top",
+          },
+          font: {
+            name: "Yu Gothic Medium",
+            sz: 12,
+          },
+        },
+      };
+    }
+  }
 
   xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
   const buffer = xlsx.write(workbook, { type: "buffer" });
