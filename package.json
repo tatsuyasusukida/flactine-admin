@@ -31,7 +31,6 @@
     "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.2",
     "prisma": "^4.16.2",
     "ts-node": "^10.9.1"
   },

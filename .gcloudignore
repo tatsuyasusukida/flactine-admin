@@ -47,5 +47,6 @@ next-env.d.ts
 /playwright/.cache/
 /tmp/
 
-.git
+/.git/
 /docs/
+/prisma/migrations/
