@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import {
+  findDate,
   readWorkBook,
   validateWorkbook,
   workbookToCustomers,
@@ -82,46 +83,6 @@ export default async function handler(
       redirect: "/customers/import/finish",
     });
   });
-}
-
-function findDate(
-  year: number,
-  month: number,
-  nth: number,
-  dayOfWeek: number
-): Date {
-  const endDate = new Date(year, month, 0);
-  const days = endDate.getDate();
-  let count: number = 0;
-
-  for (let i = 1; i <= days; i += 1) {
-    const currentDate = new Date(
-      [
-        year.toString().padStart(4, "0"),
-        month.toString().padStart(2, "0"),
-        i.toString().padStart(2, "0"),
-      ].join("-")
-    );
-
-    if (currentDate.getDay() === dayOfWeek) {
-      count += 1;
-
-      if (count === nth) {
-        return currentDate;
-      }
-    }
-  }
-
-  const errorMessage =
-    `Invalid date: ` +
-    [
-      ["year", year].join("="),
-      ["month", month].join("="),
-      ["nth", nth].join("="),
-      ["dayOfWeek", dayOfWeek].join("="),
-    ].join(", ");
-
-  throw new TypeError(errorMessage);
 }
 
 export const config: PageConfig = {
