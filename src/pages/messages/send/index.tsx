@@ -12,6 +12,8 @@ export default function MessagesImport() {
     content: "",
   });
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const [validation, setValidation] = useState({
     ok: null,
     userId: { ok: null, messages: [] },
@@ -30,6 +32,8 @@ export default function MessagesImport() {
     try {
       event.preventDefault();
 
+      setIsProcessing(true);
+
       const validateUrl = "/api/line-messages/send/validate";
       const fetchOptions = {
         method: "POST",
@@ -42,8 +46,9 @@ export default function MessagesImport() {
       const validateResponse = await fetch(validateUrl, fetchOptions);
       const { validation } = await validateResponse.json();
 
+      setValidation(validation);
+
       if (!validation.ok) {
-        setValidation(validation);
         return;
       }
 
@@ -56,6 +61,8 @@ export default function MessagesImport() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -137,6 +144,7 @@ export default function MessagesImport() {
               className="btn btn-primary"
               type="submit"
               onClick={onSubmit}
+              disabled={isProcessing}
             >
               一斉送信
             </button>
