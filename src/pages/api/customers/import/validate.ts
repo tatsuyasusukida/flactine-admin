@@ -29,7 +29,7 @@ export type DeliveryHeaderCell = {
 export function getDeliveryHeaderCells(
   actualHeaderCells: string[]
 ): DeliveryHeaderCell[] {
-  const monthHeaderPattern = /^(\d{4})年(\d{1,2})月$/;
+  const monthHeaderPattern = /^(\d{4})年(\d{1,2})月配達日$/;
   const deliveryHeaderCells: DeliveryHeaderCell[] = [];
 
   actualHeaderCells.forEach((text) => {

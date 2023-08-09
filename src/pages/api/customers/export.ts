@@ -51,7 +51,7 @@ export default async function handler(
     "配達スタッフ",
     "固定電話",
     "携帯電話",
-    ...sortedMonths.map(({ year, month }) => `${year}年${month}月`),
+    ...sortedMonths.map(({ year, month }) => `${year}年${month}月配達日`),
   ];
 
   const rows = users.map((user) => {
