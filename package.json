@@ -12,7 +12,9 @@
     "list": "gcloud meta list-files-for-upload",
     "deploy": "npm run activate && gcloud run deploy flactine-admin --source . --platform managed --region asia-northeast1 --allow-unauthenticated",
     "db:seed": "dotenv -e .env.local -- prisma db seed",
-    "db:push": "dotenv -e .env.local -- prisma db push"
+    "db:push": "dotenv -e .env.local -- prisma db push",
+    "migrate:dev": "dotenv -e .env.local -- prisma migrate dev",
+    "migrate:deploy": "dotenv -e .env.local -- prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
