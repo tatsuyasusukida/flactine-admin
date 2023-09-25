@@ -17,7 +17,7 @@ export async function readWorkBook(req: NextApiRequest): Promise<WorkBook> {
   return xlsx.read(buffer);
 }
 
-export const customersSheetName = "Sheet 1";
+export const customersSheetName = "Sheet1";
 
 export type DeliveryHeaderCell = {
   text: string;
@@ -55,14 +55,14 @@ export function workbookToCustomers(workbook: WorkBook) {
   const deliveryHeaderCells = getDeliveryHeaderCells(actualHeaderCells);
 
   return rows.map((row) => {
-    const number = row["番号"].toString().trim();
-    const name = row["顧客名"].toString().trim();
-    const lineUserId = row["LINE ID"].toString().trim();
-    const deliveryStaff = row["配達スタッフ"].toString().trim();
-    const tel = row["固定電話"].toString().trim();
-    const mobile = row["携帯電話"].toString().trim();
+    const number = (row["番号"] ?? "").toString().trim();
+    const name = (row["顧客名"] ?? "").toString().trim();
+    const lineUserId = (row["LINE ID"] ?? "").toString().trim();
+    const deliveryStaff = (row["配達スタッフ"] ?? "").toString().trim();
+    const tel = (row["固定電話"] ?? "").toString().trim();
+    const mobile = (row["携帯電話"] ?? "").toString().trim();
     const deliveries = deliveryHeaderCells.map(({ text, year, month }) => {
-      const input = row[text].toString().trim();
+      const input = (row[text] ?? "").toString().trim();
       return { text, year, month, input };
     });
 
@@ -262,7 +262,7 @@ export function validateWorkbook(
   const duplicatedLineUserIds = customers
     .map((customer) => customer.lineUserId)
     .filter((lineUserId, i, lineUserIds) => {
-      return lineUserIds.indexOf(lineUserId) !== i;
+      return lineUserId && lineUserIds.indexOf(lineUserId) !== i;
     });
 
   for (const lineUserId of duplicatedLineUserIds) {

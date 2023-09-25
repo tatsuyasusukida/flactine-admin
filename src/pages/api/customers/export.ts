@@ -133,7 +133,7 @@ export default async function handler(
     }
   }
 
-  xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+  xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet1");
   const buffer = xlsx.write(workbook, { type: "buffer" });
 
   res.setHeader("Content-Disposition", 'attachment; filename="customers.xlsx"');
